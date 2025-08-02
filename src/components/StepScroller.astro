@@ -1,0 +1,71 @@
+---
+// src/components/StepScroller.astro
+import { motion } from "framer-motion";
+---
+
+<div class="relative min-h-screen">
+    <div class="sticky top-0 h-screen flex items-center">
+        <div class="w-1/2 pl-12">
+            <div class="max-w-md">
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                    class="mb-24"
+                >
+                    <span class="text-5xl font-bold text-coral">1</span>
+                    <h3 class="text-3xl font-bold text-ink mt-4">Scan</h3>
+                    <p class="text-xl text-ink/80 mt-4">
+                        Snap a QR code at any venue to claim your unique
+                        referral link
+                    </p>
+                </motion.div>
+
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                    class="mb-24"
+                >
+                    <span class="text-5xl font-bold text-coral">2</span>
+                    <h3 class="text-3xl font-bold text-ink mt-4">Share</h3>
+                    <p class="text-xl text-ink/80 mt-4">
+                        Share your link with travelers looking for authentic
+                        experiences
+                    </p>
+                </motion.div>
+
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <span class="text-5xl font-bold text-coral">3</span>
+                    <h3 class="text-3xl font-bold text-ink mt-4">Earn</h3>
+                    <p class="text-xl text-ink/80 mt-4">
+                        Get paid for every booking. Cash out any time, no limits
+                    </p>
+                </motion.div>
+            </div>
+        </div>
+
+        <div class="w-1/2 flex justify-center">
+            <div class="relative">
+                <div
+                    class="absolute inset-0 bg-coral/10 rounded-full blur-3xl animate-pulse"
+                >
+                </div>
+                <div
+                    class="relative bg-gray-800 border-8 border-ink rounded-[40px] w-[280px] h-[580px] overflow-hidden shadow-2xl"
+                >
+                    <!-- Phone mockup content would go here -->
+                    <div
+                        class="absolute inset-0 flex items-center justify-center"
+                    >
+                        <div class="text-6xl animate-pulse">📱</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

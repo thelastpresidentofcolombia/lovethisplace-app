@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+    /* Light Mode Base Styles */
+    :root {
+        --bg-color: #FFF8F4;
+        /* Sand */
+        --text-color: #403532;
+        /* Ink */
+        --accent-color: #FF6F61;
+        /* Coral */
+    }
+
+    /* Dark Mode Base Styles */
+    :root.dark {
+        --bg-color: #1a1a1a;
+        --text-color: #f0f0f0;
+        /* Off-white for better readability */
+        --accent-color: #FF6F61;
+        /* Coral remains vibrant */
+    }
+
+    body {
+        @apply bg-[var(--bg-color)] text-[var(--text-color)] font-sans antialiased transition-colors duration-300;
+    }
+
+    /*
+    The custom font-family declarations have been removed.
+    We will apply the font-display class directly in the HTML,
+    which is the most reliable method and avoids all build errors.
+  */
+}

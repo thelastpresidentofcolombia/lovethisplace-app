@@ -1,0 +1,32 @@
+---
+import { Icon } from "astro-icon/components";
+
+export interface Props {
+    iconName: string; // Changed from 'icon' to 'iconName'
+    title: string;
+    description: string;
+}
+
+const { iconName, title, description } = Astro.props;
+---
+
+<div
+    class="bg-white/5 dark:bg-white/10
+    backdrop-blur-lg
+    border border-white/10 dark:border-white/20
+    rounded-2xl
+    p-6
+    text-center
+    flex flex-col items-center
+    transition-transform duration-300
+    hover:scale-105 hover:border-white/40"
+>
+    <Icon name={iconName} class="w-10 h-10 mb-4 text-coral" />
+
+    <h3 class="text-xl font-display font-bold text-ink dark:text-white mb-2">
+        {title}
+    </h3>
+    <p class="text-ink/70 dark:text-white/70 text-sm">
+        {description}
+    </p>
+</div>

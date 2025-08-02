@@ -1,0 +1,75 @@
+---
+// src/components/GenerateLinkModal.astro
+---
+
+<div
+    id="generate-link-modal"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden"
+>
+    <div
+        id="modal-content"
+        class="bg-white dark:bg-dark-bg rounded-2xl shadow-xl w-full max-w-lg m-4 transition-all duration-300 scale-95 opacity-0"
+    >
+        <div
+            class="p-6 border-b border-ink/10 dark:border-sand/20 flex justify-between items-center"
+        >
+            <h3 id="modal-venue-name" class="font-display text-2xl font-bold">
+                Generate Link
+            </h3>
+            <button
+                id="close-modal-btn"
+                class="text-ink/50 hover:text-coral text-3xl leading-none"
+                >&times;</button
+            >
+        </div>
+
+        <div class="p-6 space-y-4">
+            <div>
+                <label
+                    for="note-input"
+                    class="block text-sm font-medium text-ink/80 dark:text-sand/80 mb-2"
+                    >Add a personal note (optional)</label
+                >
+                <textarea
+                    id="note-input"
+                    placeholder="e.g., 'The sunset view from the pool is absolutely unforgettable! Ask for David at the front desk.'"
+                    class="w-full h-28 p-3 rounded-lg border border-ink/20 dark:border-sand/30 bg-sand/30 dark:bg-dark-bg/50 focus:ring-2 focus:ring-coral focus:outline-none transition"
+                ></textarea>
+            </div>
+
+            <div>
+                <label
+                    for="referral-link-input"
+                    class="block text-sm font-medium text-ink/80 dark:text-sand/80 mb-2"
+                    >Your unique referral link</label
+                >
+                <div class="flex gap-2">
+                    <input
+                        type="text"
+                        readonly
+                        id="referral-link-input"
+                        class="flex-grow p-2 rounded-lg border bg-sand/50 dark:bg-dark-bg/60"
+                    />
+                    <button
+                        id="copy-link-btn"
+                        class="px-4 py-2 bg-ink/80 dark:bg-sand/80 text-white dark:text-ink font-bold rounded-lg text-sm"
+                        >Copy</button
+                    >
+                </div>
+            </div>
+
+            <div id="modal-status" class="text-center text-sm h-5"></div>
+        </div>
+
+        <div
+            class="p-6 bg-sand/40 dark:bg-dark-bg/40 border-t border-ink/10 dark:border-sand/20"
+        >
+            <button
+                id="save-note-btn"
+                class="w-full px-6 py-3 rounded-full bg-coral text-white font-bold shadow hover:shadow-lg hover:scale-105 active:scale-95 transition"
+            >
+                Save Note & Close
+            </button>
+        </div>
+    </div>
+</div>

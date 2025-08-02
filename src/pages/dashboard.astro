@@ -1,0 +1,224 @@
+---
+export const prerender = false;
+import AuthLayout from "../layouts/AuthLayout.astro";
+import GenerateLinkModal from "../components/GenerateLinkModal.astro";
+import { Icon } from "astro-icon/components";
+
+// This server-side redirect is correct and should remain
+if (!Astro.cookies.has("session")) {
+  return Astro.redirect("/login");
+}
+---
+
+<AuthLayout title="Referral Dashboard">
+  <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="text-center mb-12">
+      <h1 class="font-display text-4xl font-bold mb-4">Referral Dashboard</h1>
+      <p class="text-lg text-ink/80 dark:text-sand/80">
+        Welcome, Founding Member! Search, filter, and generate links for your
+        properties.
+      </p>
+    </div>
+
+    <div class="mb-8 flex flex-col md:flex-row gap-4">
+      <div class="relative flex-grow">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search by property name..."
+          class="w-full pl-10 pr-4 py-3 rounded-full bg-sand/50 dark:bg-dark-bg/80 border border-ink/10 dark:border-sand/20 focus:ring-2 focus:ring-coral focus:outline-none"
+          disabled
+        />
+        <Icon
+          name="ph:magnifying-glass"
+          class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-ink/50 dark:text-sand/50"
+        />
+      </div>
+      <select
+        id="neighborhood-filter"
+        class="px-4 py-3 rounded-full bg-sand/50 dark:bg-dark-bg/80 border border-ink/10 dark:border-sand/20 focus:ring-2 focus:ring-coral focus:outline-none"
+        disabled
+      >
+        <option value="">All Neighborhoods</option>
+      </select>
+    </div>
+    <div
+      id="venues-grid"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[300px]"
+    >
+      <p
+        id="loading-message"
+        class="text-center text-lg text-ink/70 dark:text-sand/70 py-16 md:col-span-2 lg:col-span-3"
+      >
+        Loading properties...
+      </p>
+    </div>
+
+    <div class="text-center">
+      <button
+        id="logout-button"
+        class="mt-16 px-8 py-4 bg-ink/80 dark:bg-sand/80 text-white dark:text-ink font-bold rounded-full transition-transform hover:scale-105"
+      >
+        Log Out
+      </button>
+    </div>
+  </div>
+
+  <GenerateLinkModal />
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const venuesGrid = document.getElementById("venues-grid");
+      const loadingMessage = document.getElementById("loading-message");
+      const logoutButton = document.getElementById("logout-button");
+      let currentVenueId = null;
+
+      logoutButton.addEventListener("click", async () => {
+        await fetch("/api/auth/logout", { method: "POST" });
+        window.location.href = "/login";
+      });
+
+      async function fetchAndRenderVenues() {
+        try {
+          const res = await fetch("/api/venues");
+          if (!res.ok) {
+            if (res.status === 401) window.location.href = "/login";
+            throw new Error("Failed to fetch venues");
+          }
+          const venues = await res.json();
+
+          if (loadingMessage) {
+            loadingMessage.style.display = "none";
+          }
+
+          const searchInput = document.getElementById(
+            "search-input",
+          ) as HTMLInputElement;
+          if (searchInput) {
+            searchInput.disabled = false;
+          }
+
+          const neighborhoodFilter = document.getElementById(
+            "neighborhood-filter",
+          ) as HTMLSelectElement;
+          if (neighborhoodFilter) {
+            neighborhoodFilter.disabled = false;
+
+            const neighborhoods = Array.from(
+              new Set(venues.map((v) => v.neighborhood).filter(Boolean)),
+            ).sort();
+            neighborhoods.forEach((hood) => {
+              const opt = document.createElement("option");
+              opt.value = hood;
+              opt.textContent = hood;
+              neighborhoodFilter.appendChild(opt);
+            });
+          }
+
+          venuesGrid.innerHTML = "";
+          venues.forEach((v) => {
+            const card = document.createElement("div");
+            card.className =
+              "venue-card bg-sand/50 dark:bg-dark-bg/50 rounded-lg border border-ink/10 dark:border-sand/20 overflow-hidden transition-shadow hover:shadow-xl flex flex-col";
+            card.dataset.id = v.id;
+            card.dataset.name = v.name.toLowerCase();
+            card.dataset.neighborhood = v.neighborhood || "";
+            card.innerHTML = `
+              <img src="${v.imageUrls[0]}" alt="${v.name}" class="w-full h-48 object-cover" />
+              <div class="p-4 flex flex-col flex-grow">
+                <h3 class="font-bold text-xl mb-2">${v.name}</h3>
+                <div class="flex items-center gap-4 text-sm text-ink/60 dark:text-sand/60 mb-4">
+                  <span>${v.guests} guests</span>
+                  <span>${v.bedrooms} BR</span>
+                </div>
+                <button class="generate-link-btn mt-auto px-4 py-2 bg-coral text-white font-bold rounded-full transition hover:bg-coral-dark">
+                  Recommend & Get Link
+                </button>
+              </div>`;
+            venuesGrid.appendChild(card);
+          });
+
+          document.querySelectorAll(".generate-link-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const card = btn.closest(".venue-card");
+              currentVenueId = card.dataset.id;
+              openModal((card as HTMLElement).dataset.name);
+            });
+          });
+        } catch (err) {
+          console.error(err);
+          if (loadingMessage) {
+            loadingMessage.textContent =
+              "Could not load properties. Please refresh.";
+          }
+        }
+      }
+
+      function openModal(name) {
+        const modal = document.getElementById("generate-link-modal");
+        // --- ADD THIS LINE BACK ---
+        const modalContent = document.getElementById("modal-content");
+        const noteInput = document.getElementById(
+          "note-input",
+        ) as HTMLTextAreaElement;
+        const saveBtn = document.getElementById("save-note-btn");
+        const linkInput = document.getElementById(
+          "referral-link-input",
+        ) as HTMLInputElement;
+        const status = document.getElementById("modal-status");
+        const venueName = document.getElementById("modal-venue-name");
+
+        noteInput.value = "";
+        linkInput.value = "";
+        status.textContent = "";
+        saveBtn.removeAttribute("disabled");
+        venueName.textContent = `For: ${name}`;
+        modal.classList.remove("hidden");
+        // --- AND ADD THIS LINE BACK (for the fade-in effect) ---
+        setTimeout(
+          () => modalContent.classList.remove("scale-95", "opacity-0"),
+          10,
+        );
+
+        saveBtn.onclick = async () => {
+          status.textContent = "Saving...";
+          saveBtn.setAttribute("disabled", "true");
+          try {
+            const res = await fetch("/api/notes", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                propertyId: currentVenueId,
+                note: noteInput.value.trim(),
+              }),
+            });
+
+            if (!res.ok) throw new Error("Could not save note.");
+
+            const { link } = await res.json();
+            linkInput.value = link;
+            status.textContent = "Link generated!";
+          } catch (err) {
+            status.textContent = "Error saving note.";
+            saveBtn.removeAttribute("disabled");
+          }
+        };
+
+        // This is the logic to close the modal
+        const closeModal = () => {
+          modalContent.classList.add("scale-95", "opacity-0");
+          setTimeout(() => modal.classList.add("hidden"), 300);
+        };
+
+        document.getElementById("close-modal-btn").onclick = closeModal;
+        document.getElementById("copy-link-btn").onclick = () => {
+          linkInput.select();
+          document.execCommand("copy");
+          status.textContent = "Copied!";
+        };
+      }
+
+      fetchAndRenderVenues();
+    });
+  </script>
+</AuthLayout>

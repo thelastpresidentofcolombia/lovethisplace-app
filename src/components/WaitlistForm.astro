@@ -1,0 +1,95 @@
+---
+// No longer need Formspree
+---
+
+<div
+    id="waitlist-section"
+    class="max-w-2xl mx-auto bg-gradient-to-r from-coral/5 to-mint/5 p-8 sm:p-12 rounded-3xl backdrop-blur border border-white/30 shadow-xl"
+>
+    <div class="text-center mb-10">
+        <h2 class="text-3xl font-extrabold mb-4">Join the Founder's Circle</h2>
+        <p class="text-ink/80 dark:text-sand/80 text-lg">
+            Be the first to access lifetime 0% fees. Limited to 500 founding
+            members.
+        </p>
+    </div>
+
+    <!-- This form now uses our custom API endpoint -->
+    <form id="waitlist-form" class="flex flex-col sm:flex-row gap-4">
+        <input
+            type="email"
+            id="email-input"
+            name="email"
+            required
+            placeholder="Your best email"
+            class="flex-grow px-6 py-4 rounded-full bg-white/90 dark:bg-dark-bg/80 border border-ink/10 dark:border-sand/20 focus:outline-none focus:ring-2 focus:ring-coral transition"
+        />
+        <button
+            type="submit"
+            id="submit-button"
+            class="px-8 py-4 bg-coral text-white rounded-full font-bold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-150 whitespace-nowrap"
+        >
+            Claim Founding Offer
+        </button>
+    </form>
+
+    <!-- This message will show success or error feedback -->
+    <p id="response-message" class="mt-4 text-center h-6 font-medium"></p>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("waitlist-form");
+        const emailInput = document.getElementById(
+            "email-input",
+        ) as HTMLInputElement;
+        const submitButton = document.getElementById("submit-button");
+        const responseMessage = document.getElementById("response-message");
+
+        if (!form || !emailInput || !submitButton || !responseMessage) {
+            console.error("Waitlist form elements not found!");
+            return;
+        }
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const email = emailInput.value;
+            submitButton.textContent = "Submitting...";
+            submitButton.setAttribute("disabled", "true");
+            responseMessage.textContent = "";
+
+            try {
+                const response = await fetch("/api/waitlist", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    responseMessage.textContent =
+                        "✅ Thank you! You're on the list.";
+                    responseMessage.classList.remove("text-red-500");
+                    responseMessage.classList.add("text-green-500");
+                    emailInput.value = ""; // Clear the input
+                } else {
+                    responseMessage.textContent = `❌ ${result.message || "An error occurred."}`;
+                    responseMessage.classList.remove("text-green-500");
+                    responseMessage.classList.add("text-red-500");
+                }
+            } catch (error) {
+                responseMessage.textContent =
+                    "❌ A network error occurred. Please try again.";
+                responseMessage.classList.remove("text-green-500");
+                responseMessage.classList.add("text-red-500");
+            } finally {
+                submitButton.textContent = "Claim Founding Offer";
+                submitButton.removeAttribute("disabled");
+            }
+        });
+    });
+</script>

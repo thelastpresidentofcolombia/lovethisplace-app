@@ -1,0 +1,148 @@
+---
+/*  src/components/LuxuryGallery.astro  */
+import { Icon } from "astro-icon/components";
+
+export interface Props {
+    images: string[];
+    venueName: string;
+}
+const { images, venueName } = Astro.props;
+---
+
+<div class="ltp-gallery">
+    <!-- HERO --------------------------------------------------------- -->
+    <figure
+        class="relative w-full h-[55vh] md:h-[65vh] overflow-hidden rounded-2xl bg-black/10"
+    >
+        <img
+            id="ltp-hero"
+            src={images[0]}
+            alt={`Hero of ${venueName}`}
+            class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ease-in-out"
+        />
+
+        <!-- NAV ARROWS -->
+        <button
+            id="ltp-prev"
+            aria-label="Previous"
+            class="ltp-arrow left-4 md:left-6"
+        >
+            <Icon name="ph:caret-left-bold" class="w-6 h-6 md:w-8 md:h-8" />
+        </button>
+
+        <button
+            id="ltp-next"
+            aria-label="Next"
+            class="ltp-arrow right-4 md:right-6"
+        >
+            <Icon name="ph:caret-right-bold" class="w-6 h-6 md:w-8 md:h-8" />
+        </button>
+
+        <!-- COUNTER -->
+        <figcaption
+            class="absolute bottom-4 left-4 md:bottom-6 md:left-6 bg-black/40 text-white/90 backdrop-blur px-3 py-1 rounded-full text-xs md:text-sm"
+        >
+            <span id="ltp-count">1</span>/<span>{images.length}</span>
+        </figcaption>
+    </figure>
+
+    <!-- THUMBS -------------------------------------------------------- -->
+    <nav class="mt-5">
+        <ul
+            id="ltp-thumbs"
+            class="mx-auto flex gap-3 overflow-x-auto pb-3 max-w-full w-max scroll-smooth snap-x snap-mandatory"
+        >
+            {
+                images.map((img, i) => (
+                    <li class="snap-center">
+                        <button
+                            class={`ltp-thumb ${i === 0 ? "is-active" : ""}`}
+                            data-i={i}
+                            aria-label={`View ${i + 1}`}
+                        >
+                            <img src={img} alt="" loading="lazy" />
+                        </button>
+                    </li>
+                ))
+            }
+        </ul>
+    </nav>
+</div>
+
+<style is:global>
+    .ltp-gallery {
+        --coral: #ff7f50;
+    }
+    /* HERO arrows */
+    .ltp-arrow {
+        @apply absolute top-1/2 -translate-y-1/2 grid place-items-center
+            w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/30
+            backdrop-blur-sm text-white hover:bg-white/40
+            transition-all duration-200;
+    }
+    /* thumbnails */
+    .ltp-thumb {
+        @apply w-20 h-20 md:w-24 md:h-24 rounded-lg overflow-hidden
+            border-2 border-transparent opacity-80
+            hover:opacity-100 hover:scale-105 transition-all;
+    }
+    .ltp-thumb.is-active {
+        @apply border-[var(--coral)] shadow-md scale-105 md:scale-110 opacity-100;
+    }
+    .ltp-thumb img {
+        @apply w-full h-full object-cover;
+    }
+
+    /* hide rail scrollbar */
+    #ltp-thumbs::-webkit-scrollbar {
+        display: none;
+    }
+    #ltp-thumbs {
+        scrollbar-width: none;
+    }
+</style>
+
+<script is:inline data-images={JSON.stringify(images)}>
+    const images = JSON.parse(document.currentScript.dataset.images);
+
+    const hero = document.getElementById("ltp-hero");
+    const prevBtn = document.getElementById("ltp-prev");
+    const nextBtn = document.getElementById("ltp-next");
+    const counter = document.getElementById("ltp-count");
+    const thumbs = Array.from(document.querySelectorAll(".ltp-thumb"));
+    const strip = document.getElementById("ltp-thumbs");
+
+    let i = 0;
+
+    function setActive(n) {
+        i = (n + images.length) % images.length;
+
+        hero.classList.add("opacity-0");
+        setTimeout(() => {
+            hero.src = images[i];
+            hero.classList.remove("opacity-0");
+        }, 150);
+
+        counter.textContent = i + 1;
+        thumbs.forEach((t, idx) => t.classList.toggle("is-active", idx === i));
+
+        /* center active thumb */
+        const el = thumbs[i].parentElement;
+        strip.scrollTo({
+            left: el.offsetLeft - strip.clientWidth / 2 + el.clientWidth / 2,
+            behavior: "smooth",
+        });
+    }
+
+    prevBtn.onclick = () => setActive(i - 1);
+    nextBtn.onclick = () => setActive(i + 1);
+    thumbs.forEach((btn) =>
+        btn.addEventListener("click", () => setActive(+btn.dataset.i)),
+    );
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") prevBtn.click();
+        if (e.key === "ArrowRight") nextBtn.click();
+    });
+
+    setActive(0); /* initialise */
+</script>

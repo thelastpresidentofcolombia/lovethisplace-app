@@ -1,0 +1,46 @@
+---
+// src/components/Logo.astro
+---
+
+<div class="flex items-center gap-3 group">
+    <!-- Dynamic Gradient Pin with Interactive Heart -->
+    <svg
+        class="w-10 h-10 flex-shrink-0"
+        viewBox="0 0 64 64"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-label="LoveThisPlace logo"
+    >
+        <defs>
+            <linearGradient
+                id="pinGradient"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="100%"
+            >
+                <stop offset="0%" stop-color="#403532"></stop>
+                <stop offset="100%" stop-color="#2A211F"></stop>
+            </linearGradient>
+        </defs>
+
+        <!-- Pin Body -->
+        <path
+            d="M32,4 C20,4 10,14 10,26 c0,12 15,30 22,30 s22-18 22-30 C54,14 44,4 32,4z"
+            fill="url(#pinGradient)"
+            class="dark:opacity-90"></path>
+
+        <!-- Animated Heart -->
+        <path
+            d="M32 20.43C30.04 18.7 27.39 18 25.5 18c-3.14 0-5.5 2.36-5.5 5.5 0 2.91 2.14 5.27 5 7.15L32 36.5l7-5.85c2.86-1.88 5-4.24 5-7.15 0-3.14-2.36-5.5-5.5-5.5-1.89 0-4.54.7-6.5 2.43z"
+            fill="#FF6F61"
+            class="transition-transform duration-300 origin-center group-hover:scale-110"
+        ></path>
+    </svg>
+
+    <!-- Gradient Wordmark with hover effect -->
+    <span
+        class="font-display text-3xl font-semibold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-ink/90 to-ink dark:from-sand/80 dark:to-white group-hover:bg-gradient-to-r group-hover:from-coral group-hover:to-mint transition-all duration-500"
+    >
+        LoveThisPlace
+    </span>
+</div>

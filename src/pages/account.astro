@@ -1,0 +1,30 @@
+---
+export const prerender = false;
+import AuthLayout from '../layouts/AuthLayout.astro';
+import admin from '../lib/firebase-admin.js';
+
+if (!Astro.cookies.has('session')) {
+  return Astro.redirect('/login');
+}
+
+const sessionCookie = Astro.cookies.get('session')?.value;
+let email = '';
+try {
+  const decoded = await admin.auth().verifySessionCookie(sessionCookie, true);
+  email = decoded.email || '';
+} catch {
+  return Astro.redirect('/login');
+}
+---
+
+<AuthLayout title="My Account">
+  <div class="max-w-md mx-auto py-8">
+    <h2 class="text-2xl font-semibold mb-4">My Account</h2>
+    <p><strong>Email:</strong> {email}</p>
+    <form method="post" action="/api/auth/logout">
+      <button class="mt-4 px-6 py-3 bg-ink/80 text-white rounded-full">
+        Log Out
+      </button>
+    </form>
+  </div>
+</AuthLayout>
