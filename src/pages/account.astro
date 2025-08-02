@@ -1,19 +1,19 @@
 ---
 export const prerender = false;
-import AuthLayout from '../layouts/AuthLayout.astro';
-import admin from '../lib/firebase-admin.js';
+import AuthLayout from "../layouts/AuthLayout.astro";
+import { adminAuth, adminDb } from "../lib/firebase/admin";
 
-if (!Astro.cookies.has('session')) {
-  return Astro.redirect('/login');
+if (!Astro.cookies.has("session")) {
+  return Astro.redirect("/login");
 }
 
-const sessionCookie = Astro.cookies.get('session')?.value;
-let email = '';
+const sessionCookie = Astro.cookies.get("session")?.value;
+let email = "";
 try {
   const decoded = await admin.auth().verifySessionCookie(sessionCookie, true);
-  email = decoded.email || '';
+  email = decoded.email || "";
 } catch {
-  return Astro.redirect('/login');
+  return Astro.redirect("/login");
 }
 ---
 
