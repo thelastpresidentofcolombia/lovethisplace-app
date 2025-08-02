@@ -2,12 +2,17 @@ import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import icon from "astro-icon";
 
+// --- ADD THIS LINE ---
+import vercel from "@astrojs/vercel/serverless";
+
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
+
+  // --- ADD THIS LINE ---
+  adapter: vercel(),
+
   integrations: [
-    // The 'applyBaseStyles: false' option has been removed.
-    // This was the cause of the error.
     tailwind(),
     icon()
   ]
