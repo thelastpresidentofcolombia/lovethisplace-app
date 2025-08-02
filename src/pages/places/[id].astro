@@ -1,11 +1,9 @@
 ---
-//  src/pages/places/[id].astro  –  RESPONSIVE-ENHANCED FILE
 import AuthLayout from "../../layouts/AuthLayout.astro";
 import PhotoGallery from "../../components/PhotoGallery.astro";
 import { Icon } from "astro-icon/components";
 import { adminDb } from "../../lib/firebase/admin";
 
-/* ─── server ─────────────────────────────────────────────────────────────── */
 const { id } = Astro.params;
 const ref = Astro.url.searchParams.get("ref");
 if (!id) return Astro.redirect("/404");
@@ -47,33 +45,15 @@ const preload = venue.imageUrls?.[0]
 ---
 
 <AuthLayout title={venue.name} preload={preload}>
-    <header
-        class="relative isolate h-[50vh] min-h-[360px] md:min-h-[460px] overflow-hidden"
-    >
-        <div
-            class="hero-bg absolute inset-0 bg-cover bg-center"
-            style={`background-image:url('${venue.imageUrls[0]}')`}
-        >
-        </div>
-        <div
-            class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"
-        >
-        </div>
-        <div
-            class="absolute bottom-0 inset-x-0 h-24 bg-[linear-gradient(transparent,theme(colors.sand/10))]"
-        >
-        </div>
-    </header>
-
     <div
-        class="lg:hidden sticky bottom-0 inset-x-0 z-40 backdrop-blur
-           bg-white/80 dark:bg-dark-bg/80 border-t border-ink/10 dark:border-sand/20"
+        class="lg:hidden sticky top-0 inset-x-0 z-40 backdrop-blur
+           bg-white/80 dark:bg-dark-bg/80 border-b border-ink/10 dark:border-sand/20"
     >
         <div
-            class="max-w-7xl mx-auto flex items-center justify-between px-4 py-4"
+            class="max-w-7xl mx-auto flex items-center justify-between px-4 py-3"
         >
             <div>
-                <p class="font-display text-xl font-bold">
+                <p class="font-display text-lg font-bold">
                     {venue.price.split("/")[0]}
                 </p>
                 <p class="text-xs text-ink/70 dark:text-sand/70">per night</p>
@@ -81,27 +61,25 @@ const preload = venue.imageUrls?.[0]
             <a
                 href={bookingUrl}
                 target="_blank"
-                class="px-6 py-3 rounded-full bg-coral text-white font-bold shadow
-        hover:shadow-lg hover:scale-105 active:scale-95 transition"
+                class="px-5 py-2.5 rounded-full bg-coral text-white font-bold shadow
+        hover:shadow-lg hover:scale-105 active:scale-95 transition text-sm"
             >
                 Book now
             </a>
         </div>
     </div>
 
-    <main class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="lg:grid lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-14">
-            <article class="w-full space-y-8 lg:space-y-12">
-                <section
-                    class="-mt-24 bg-white dark:bg-dark-bg rounded-2xl p-6 md:p-10 shadow-2xl space-y-4"
-                >
+            <article class="w-full space-y-8">
+                <section class="space-y-3">
                     <h1
-                        class="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight"
+                        class="font-display text-4xl md:text-5xl font-extrabold leading-tight"
                     >
                         {venue.name}
                     </h1>
                     <p
-                        class="flex items-center gap-3 text-ink/70 dark:text-sand/70 text-sm md:text-base"
+                        class="flex items-center gap-3 text-ink/70 dark:text-sand/70"
                     >
                         <Icon name="ph:map-pin-fill" class="w-4 h-4" />
                         {venue.neighborhood}, Cartagena
@@ -117,7 +95,7 @@ const preload = venue.imageUrls?.[0]
 
                 {
                     recommendation && (
-                        <section class="bg-mint/20 dark:bg-mint/10 border-l-4 border-mint rounded-lg p-6 md:p-8">
+                        <section class="bg-mint/20 dark:bg-mint/10 border-l-4 border-mint rounded-lg p-6">
                             <h3 class="font-bold text-xl mb-2 text-ink dark:text-sand">
                                 A note from {recommendation.referrerName}:
                             </h3>
@@ -131,119 +109,13 @@ const preload = venue.imageUrls?.[0]
                 <PhotoGallery
                     images={venue.imageUrls}
                     venueName={venue.name}
-                    class="aspect-[1.85/1] md:aspect-[4/3] lg:rounded-2xl shadow-xl"
+                    class="aspect-video lg:rounded-2xl shadow-xl overflow-hidden"
                 />
-
-                <section
-                    class="space-y-10 rounded-2xl border border-ink/10 dark:border-sand/20 p-6 md:p-8 shadow-sm"
-                >
-                    <div class="space-y-6">
-                        <h2 class="font-display text-3xl font-bold">
-                            Villa Highlights
-                        </h2>
-                        <div class="grid gap-x-6 gap-y-8 sm:grid-cols-2">
-                            {
-                                [
-                                    {
-                                        icon: "ph:house-line-fill",
-                                        label: "Property type",
-                                        value: "Luxury private villa",
-                                    },
-                                    {
-                                        icon: "ph:users-three-fill",
-                                        label: "Capacity",
-                                        value: `Up to ${venue.guests} guests`,
-                                    },
-                                    {
-                                        icon: "ph:bed-fill",
-                                        label: "Bedrooms",
-                                        value: `${venue.bedrooms} suites`,
-                                    },
-                                    {
-                                        icon: "ph:bathtub-fill",
-                                        label: "Bathrooms",
-                                        value: `${
-                                            venue.bathrooms || venue.bedrooms
-                                        } designer baths`,
-                                    },
-                                ].map((card) => (
-                                    <div class="flex items-start gap-4">
-                                        <Icon
-                                            name={card.icon}
-                                            class="w-7 h-7 text-coral mt-1 flex-shrink-0"
-                                        />
-                                        <div>
-                                            <h3 class="font-semibold">
-                                                {card.label}
-                                            </h3>
-                                            <p class="text-ink/80 dark:text-sand/80 text-sm">
-                                                {card.value}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                    </div>
-
-                    <hr class="border-ink/10 dark:border-sand/20" />
-
-                    <div class="space-y-6">
-                        <h2 class="font-display text-3xl font-bold">
-                            About this Villa
-                        </h2>
-                        <div id="description-wrapper" class="relative">
-                            <div
-                                id="description-content"
-                                class="prose prose-lg dark:prose-invert max-w-none space-y-4 overflow-hidden max-h-48 transition-all duration-500"
-                            >
-                                {
-                                    venue.description
-                                        .split("\n")
-                                        .map((p) => <p>{p}</p>)
-                                }
-                            </div>
-                            <div
-                                id="read-more-container"
-                                class="absolute bottom-0 inset-x-0 pt-12 bg-gradient-to-t from-white dark:from-dark-bg to-transparent"
-                            >
-                                <button
-                                    id="read-more-btn"
-                                    class="font-bold text-coral hover:underline"
-                                >
-                                    Read more
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                {
-                    venue.amenities?.length && (
-                        <section class="space-y-6 rounded-2xl border border-ink/10 dark:border-sand/20 p-8 shadow-sm">
-                            <h2 class="font-display text-3xl font-bold">
-                                Exclusive Amenities
-                            </h2>
-                            <ul class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
-                                {venue.amenities.map((a) => (
-                                    <li class="flex items-center gap-3">
-                                        <Icon
-                                            name="ph:check-circle"
-                                            class="w-5 h-5 text-mint flex-shrink-0"
-                                        />
-                                        <span class="text-sm">{a}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </section>
-                    )
-                }
             </article>
 
-            <aside class="hidden lg:block sticky top-28 self-start">
+            <aside class="hidden lg:block lg:sticky top-8 self-start">
                 <div
-                    class="rounded-2xl border border-ink/10 dark:border-sand/20
-             bg-white dark:bg-dark-bg shadow-lg overflow-hidden"
+                    class="rounded-2xl border border-ink/10 dark:border-sand/20 bg-white dark:bg-dark-bg shadow-lg overflow-hidden"
                 >
                     <div
                         class="p-6 flex justify-between gap-6 border-b border-ink/10 dark:border-sand/20"
@@ -269,59 +141,17 @@ const preload = venue.imageUrls?.[0]
                             </p>
                         </div>
                     </div>
-
                     <div class="p-6">
                         <a
                             href={bookingUrl}
                             target="_blank"
-                            class="block w-full text-center px-6 py-4 bg-coral text-white font-bold
-            rounded-full hover:scale-105 active:scale-95 transition"
+                            class="block w-full text-center px-6 py-4 bg-coral text-white font-bold rounded-full hover:scale-105 active:scale-95 transition"
                         >
                             Book your stay
                         </a>
-                        <p
-                            class="mt-3 text-center text-xs text-ink/70 dark:text-sand/70"
-                        >
-                            Secure checkout on EliteCartagena.com
-                        </p>
                     </div>
                 </div>
             </aside>
         </div>
     </main>
-
-    <style is:global>
-        body {
-            overflow-x: hidden;
-        }
-        .hero-bg {
-            will-change: transform;
-            transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-    </style>
-
-    <script is:inline>
-        addEventListener("scroll", () => {
-            const h = document.querySelector(".hero-bg");
-            h && (h.style.transform = `translateY(${scrollY * 0.25}px)`);
-        });
-    </script>
-
-    <script is:inline>
-        const wrapper = document.getElementById("description-wrapper");
-        const content = document.getElementById("description-content");
-        const btnContainer = document.getElementById("read-more-container");
-        const btn = document.getElementById("read-more-btn");
-
-        if (content && btnContainer && btn) {
-            if (content.scrollHeight <= content.clientHeight) {
-                btnContainer.style.display = "none";
-            } else {
-                btn.addEventListener("click", () => {
-                    content.style.maxHeight = content.scrollHeight + "px";
-                    wrapper.removeChild(btnContainer);
-                });
-            }
-        }
-    </script>
 </AuthLayout>
