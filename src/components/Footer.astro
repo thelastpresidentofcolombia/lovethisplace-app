@@ -3,106 +3,93 @@ import Logo from "./Logo.astro";
 ---
 
 <footer
-    class="relative z-10 bg-sand/50 dark:bg-dark-bg/50 border-t border-ink/10 dark:border-sand/20 py-16 px-8"
+    class="bg-sand/50 dark:bg-dark-bg/50 border-t border-ink/10 dark:border-sand/20"
 >
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-        <!-- Logo and Company Info -->
-        <div class="md:col-span-1">
-            <a href="/" class="mb-4 inline-block">
-                <Logo />
-            </a>
-            <p class="text-sm text-ink/70 dark:text-white/70">
-                Healing the relationship between tourism and local communities.
-            </p>
-        </div>
+    <div class="max-w-7xl mx-auto px-8 py-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            <div class="lg:col-span-2">
+                <a href="/" class="mb-4 inline-block">
+                    <Logo />
+                </a>
+                <p class="text-sm text-ink/70 dark:text-sand/70 max-w-xs">
+                    Healing the relationship between tourism and local
+                    communities through authentic, community-driven discovery.
+                </p>
+            </div>
 
-        <!-- Links -->
-        <div class="md:col-span-3 grid grid-cols-2 sm:grid-cols-3 gap-8">
             <div>
-                <h4
-                    class="font-bold font-display text-ink dark:text-white mb-4"
-                >
-                    Product
+                <h4 class="font-bold font-display text-ink dark:text-sand mb-4">
+                    Navigate
                 </h4>
-                <ul class="space-y-2">
+                <ul class="space-y-3">
                     <li>
                         <a
-                            href="#"
-                            class="text-ink/70 dark:text-white/70 hover:text-coral"
-                            >Features</a>
+                            href="/dashboard"
+                            class="text-ink/70 dark:text-sand/70 hover:text-coral transition-colors"
+                        >
+                            Member Dashboard
+                        </a>
                     </li>
                     <li>
                         <a
-                            href="#"
-                            class="text-ink/70 dark:text-white/70 hover:text-coral"
-                            >For Owners</a>
+                            href="/login"
+                            class="text-ink/70 dark:text-sand/70 hover:text-coral transition-colors"
+                        >
+                            Log In / Sign Up
+                        </a>
                     </li>
                     <li>
                         <a
-                            href="#"
-                            class="text-ink/70 dark:text-white/70 hover:text-coral"
-                            >For Referrers</a>
+                            href="/blog"
+                            class="text-ink/70 dark:text-sand/70 hover:text-coral transition-colors"
+                        >
+                            Blog (Coming Soon)
+                        </a>
                     </li>
                 </ul>
             </div>
+
             <div>
-                <h4
-                    class="font-bold font-display text-ink dark:text-white mb-4"
-                >
+                <h4 class="font-bold font-display text-ink dark:text-sand mb-4">
                     Company
                 </h4>
-                <ul class="space-y-2">
+                <ul class="space-y-3">
                     <li>
                         <a
-                            href="#"
-                            class="text-ink/70 dark:text-white/70 hover:text-coral"
-                            >About Us</a>
+                            href="/about"
+                            class="text-ink/70 dark:text-sand/70 hover:text-coral transition-colors"
+                        >
+                            About Us
+                        </a>
                     </li>
                     <li>
                         <a
-                            href="#"
-                            class="text-ink/70 dark:text-white/70 hover:text-coral"
-                            >Blog</a>
+                            href="https://www.elitecartagena.com"
+                            target="_blank"
+                            class="text-ink/70 dark:text-sand/70 hover:text-coral transition-colors"
+                        >
+                            Elite Cartagena
+                        </a>
                     </li>
                     <li>
                         <a
-                            href="#"
-                            class="text-ink/70 dark:text-white/70 hover:text-coral"
-                            >Contact</a>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <h4
-                    class="font-bold font-display text-ink dark:text-white mb-4"
-                >
-                    Legal
-                </h4>
-                <ul class="space-y-2">
-                    <li>
-                        <a
-                            href="#"
-                            class="text-ink/70 dark:text-white/70 hover:text-coral"
-                            >Privacy Policy</a>
-                    </li>
-                    <li>
-                        <a
-                            href="#"
-                            class="text-ink/70 dark:text-white/70 hover:text-coral"
-                            >Terms of Service</a>
+                            href="/contact"
+                            class="text-ink/70 dark:text-sand/70 hover:text-coral transition-colors"
+                        >
+                            Contact
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
-    </div>
 
-    <!-- Bottom Bar -->
-    <div
-        class="mt-16 pt-8 border-t border-ink/10 dark:border-sand/20 text-center text-sm text-ink/60 dark:text-white/60"
-    >
-        <p>
-            &copy; {new Date().getFullYear()} LoveThisPlace. A Go Elite Global Company.
-            All rights reserved.
-        </p>
+        <div
+            class="mt-12 pt-8 border-t border-ink/10 dark:border-sand/20 text-center text-sm text-ink/60 dark:text-sand/60"
+        >
+            <p>
+                &copy; {new Date().getFullYear()} LoveThisPlace.co. A Go Elite Global
+                Company.
+            </p>
+        </div>
     </div>
 </footer>
