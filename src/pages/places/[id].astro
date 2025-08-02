@@ -1,10 +1,8 @@
 ---
-//  src/pages/places/[id].astro  –  CORRECTED FILE
+//  src/pages/places/[id].astro  –  RESPONSIVE-ENHANCED FILE
 import AuthLayout from "../../layouts/AuthLayout.astro";
 import PhotoGallery from "../../components/PhotoGallery.astro";
 import { Icon } from "astro-icon/components";
-
-// --- FIX: Use the Firebase ADMIN SDK for server-side fetching ---
 import { adminDb } from "../../lib/firebase/admin";
 
 /* ─── server ─────────────────────────────────────────────────────────────── */
@@ -34,8 +32,6 @@ if (ref) {
     const noteSnap = await noteQuery.get();
     if (!noteSnap.empty) {
         recommendation = noteSnap.docs[0].data();
-        // For simplicity, we'll just use a generic name.
-        // In a real app, you might fetch the referrer's actual name here.
         recommendation.referrerName = "A friend";
     }
 }
@@ -51,7 +47,9 @@ const preload = venue.imageUrls?.[0]
 ---
 
 <AuthLayout title={venue.name} preload={preload}>
-    <header class="relative isolate h-[58vh] min-h-[460px] overflow-hidden">
+    <header
+        class="relative isolate h-[50vh] min-h-[360px] md:min-h-[460px] overflow-hidden"
+    >
         <div
             class="hero-bg absolute inset-0 bg-cover bg-center"
             style={`background-image:url('${venue.imageUrls[0]}')`}
@@ -91,14 +89,16 @@ const preload = venue.imageUrls?.[0]
         </div>
     </div>
 
-    <main class="relative isolate max-w-7xl mx-auto px-6 lg:px-8 pb-24">
-        <div class="grid lg:grid-cols-[minmax(0,1fr)_380px] gap-14">
-            <article class="space-y-12">
+    <main class="relative isolate max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+        <div
+            class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_380px] gap-8 lg:gap-14"
+        >
+            <article class="space-y-8 lg:space-y-12">
                 <section
-                    class="bg-white dark:bg-dark-bg rounded-2xl p-6 md:p-10 shadow-2xl space-y-4"
+                    class="-mt-24 bg-white dark:bg-dark-bg rounded-2xl p-6 md:p-10 shadow-2xl space-y-4"
                 >
                     <h1
-                        class="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight"
+                        class="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight"
                     >
                         {venue.name}
                     </h1>
@@ -164,7 +164,9 @@ const preload = venue.imageUrls?.[0]
                                     {
                                         icon: "ph:bathtub-fill",
                                         label: "Bathrooms",
-                                        value: `${venue.bathrooms || venue.bedrooms} designer baths`,
+                                        value: `${
+                                            venue.bathrooms || venue.bedrooms
+                                        } designer baths`,
                                     },
                                 ].map((card) => (
                                     <div class="flex items-start gap-4">
@@ -243,7 +245,7 @@ const preload = venue.imageUrls?.[0]
             <aside class="hidden lg:block sticky top-28 self-start">
                 <div
                     class="rounded-2xl border border-ink/10 dark:border-sand/20
-                 bg-white dark:bg-dark-bg shadow-lg overflow-hidden"
+               bg-white dark:bg-dark-bg shadow-lg overflow-hidden"
                 >
                     <div
                         class="p-6 flex justify-between gap-6 border-b border-ink/10 dark:border-sand/20"
