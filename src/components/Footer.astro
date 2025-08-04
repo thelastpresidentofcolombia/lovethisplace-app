@@ -1,5 +1,6 @@
 ---
 import Logo from "./Logo.astro";
+import { Icon } from "astro-icon/components"; // --- 1. ADD THIS LINE to import the Icon component ---
 ---
 
 <footer
@@ -11,10 +12,22 @@ import Logo from "./Logo.astro";
                 <a href="/" class="mb-4 inline-block">
                     <Logo />
                 </a>
-                <p class="text-sm text-ink/70 dark:text-sand/70 max-w-xs">
+                <p class="text-sm text-ink/70 dark:text-sand/70 max-w-xs mb-6">
                     Healing the relationship between tourism and local
                     communities through authentic, community-driven discovery.
                 </p>
+
+                <div class="flex items-center space-x-4">
+                    <a
+                        href="https://www.instagram.com/lovethisplace.co/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="LoveThisPlace on Instagram"
+                        class="text-ink/70 dark:text-sand/70 hover:text-coral transition-colors"
+                    >
+                        <Icon name="mdi:instagram" class="w-6 h-6" />
+                    </a>
+                </div>
             </div>
 
             <div>
